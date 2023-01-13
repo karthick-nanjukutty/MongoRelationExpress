@@ -37,10 +37,17 @@ app.get('/farms/new' , (req,res) =>{
 
 app.get ('/farms/:id' , async (req,res) =>{
     const {id} = req.params;
-    const farm = await Farm.findById(id);
+    const farm = await (await Farm.findById(id)).populate('products');
+    console.log("show farm is" , farm)
     res.render('farms/show' , { farm })
 })
 
+app.delete ('/farms/:id' , async (req,res) =>{
+    const {id} = req.params;
+    console.log("Deleting...")
+    const deleteFarmResults = await Farm.findByIdAndDelete(id)
+res.redirect ('/farms')
+})
 
 app.post('/farms' , async(req,res)=>{
 
@@ -49,6 +56,31 @@ app.post('/farms' , async(req,res)=>{
    res.redirect('/farms')
 })
 
+
+
+app.get('/farms/:id/products/new' , async (req,res) =>{
+    const {id} = req.params
+    const farm = await Farm.findById(id) 
+    console.log('Farm is ' , farm)
+    res.render('products/new', { categories, farm})
+})
+
+app.post ('/farms/:id/products' , async (req,res) =>{
+    const { id } = req.params;
+    const farm = await Farm.findById(id)
+const { name, price, category} = req.body;
+
+const product = new FarmProduct({name,price,category});
+farm.products.push(product);
+product.farm = farm;
+await farm.save();
+await product.save()
+// res.send(farm)
+
+res.redirect(`/farms/${id}`)
+    
+
+})
 
 // PRODUCT ROUTES
 
@@ -157,7 +189,8 @@ app.get ('/products/:id', async (req,res,next) =>{
     //console.log ('the parameter is' , req.params)
     const {id} = req.params
     //db.collections.findbyId()
-    const foundProduct = await FarmProduct.findById(id)
+    const foundProduct = await FarmProduct.findById(id).populate('farm','name')
+    console.log (  'the products are in ' , foundProduct)
     if (!foundProduct){
         //return next ( new AppError('Product Not Found', 404))
        throw  new AppError('Product Not Found', 404)
