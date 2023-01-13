@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+</head>
+<body>
+    <h1>Product to Update</h1>
+    <form action="/products/<%=foundProductToUpdate._id%>?_method=PUT" method = "POST">
+      <label for="name">name</label>
+      <input type="text" name="name" id="name" placeholder="productname" value="<%=foundProductToUpdate.name  %> ">
+      <label for="number">price</label>
+      <input type="number" name="price" id="number" placeholder="price" value="<%=foundProductToUpdate.price%>">
+      <label for="category">category</label>
+      <select name="category" id="category">
+          <% for (let category of categories) {%> 
+
+            <option value="<%= category %>" <%= foundProductToUpdate.category === category? 'selected' : '' %>> <%= category %>  </option>
+
+          <%  } %> 
+        <!-- <option value="fruit">fruit</option>
+        <option value="vegetable">vegetable</option>
+        <option value="dairy">dairy</option> -->
+    </select>
+    <button>Update Item</button>
+</form>
+
+<a href="/products" >Back to All Products</a>
+
+    
+</body>
+</html>

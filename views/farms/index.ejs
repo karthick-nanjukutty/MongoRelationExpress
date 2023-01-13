@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List All Farms</title>
+</head>
+<body>
+
+    <h1>All Farms</h1>
+ 
+    <!-- <h1>Listing All Farms</h1> -->
+    <% for (let farm of farms) { %>
+
+        <li>
+            <a href="/farms/<%= farm._id %> ">
+             <%= farm.name %> 
+            </a>
+        </li>
+    <!-- <li><a href="/farms/<%= farm._id %>"></a><%= farm.name %> </li> -->
+        
+   <%} %> 
+
+    
+</body>
+</html>
